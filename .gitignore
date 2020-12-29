@@ -1,5 +1,9 @@
-hmda/data/
+data/
 *.ipnyb
 .DS_Store
 .RHistory
 .RData
+__pycache__
+*.Rproj
+renv
+*.lock
