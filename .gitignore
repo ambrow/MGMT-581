@@ -4,6 +4,7 @@ data/
 .RHistory
 .RData
 __pycache__
-*.Rproj
+*.Rproj*
+*.Rprofile
 renv
 *.lock
