@@ -1,0 +1,5 @@
+hmda/data/
+*.ipnyb
+.DS_Store
+.RHistory
+.RData
