@@ -1,5 +1,6 @@
 data/
-*.ipnyb
+*.ipynb
+*.ipynb-checkpoints
 .DS_Store
 .RHistory
 .RData
