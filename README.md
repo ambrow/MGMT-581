@@ -26,7 +26,7 @@ git clone git@github.com:ambrow/MGMT-581.git
 ```
 git checkout -b name-of-your-branch
 ```
-8. Test out the code to see if it is working correctly
+8. If using Python, test out the code to see if it is working correctly
 ```
 cd hmda
 pytest tests/unit/test_hello_world.py -s
