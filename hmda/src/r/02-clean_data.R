@@ -1,6 +1,5 @@
 # clean data
 renv::restore()
-source("01-load_data.R")
 
 library(dplyr)
 clean_action_taken <- function(df){
@@ -69,11 +68,11 @@ clean_occupancy <- function(df){
   clean_df
 }
 
-cleaned_df = hmda_data_raw %>%
-  clean_action_taken() %>%
-  clean_loan_type() %>%
-  clean_loan_purpose() %>%
-  clean_hoepa() %>%
-  clean_occupancy()
-
-rm(hmda_data_raw, clean_action_taken, clean_loan_type, clean_loan_purpose, clean_hoepa, clean_occupancy)
+# cleaned_df = hmda_data_raw %>%
+#   clean_action_taken() %>%
+#   clean_loan_type() %>%
+#   clean_loan_purpose() %>%
+#   clean_hoepa() %>%
+#   clean_occupancy()
+# 
+# rm(hmda_data_raw, clean_action_taken, clean_loan_type, clean_loan_purpose, clean_hoepa, clean_occupancy)
