@@ -10,6 +10,6 @@ repos:
       name: flake8
       language: system
       entry: flake8
-      args: ['--ignore=E402,W503,W605']
+      args: ['--ignore=E402,W503,W605,E501']
       types: [python]
 
