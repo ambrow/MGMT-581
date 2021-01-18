@@ -2,7 +2,7 @@
 
 Welcome to the first week of MGMT 581. This markdown file will walk through the questions we've answered and exercises we've performed in the class lecture.
 
-## In an ideal world, what question would you want to answer with this dataset?
+## Load the data
 ```python
 # Imports
 import pandas as pd
@@ -38,25 +38,33 @@ interface.load()
 interface.data.head(15)
 ```
 
-Poll?
-Free response?
-list out answers
+## In an ideal world, what question would you want to answer with this dataset?
 
-## The Business problem we are going to solve
-Financial institutions MUST provide the government a reason for rejecting loans. We at the CFPB wish to determine if institutions are rejecting loans for reasons within the boundaries the regulators have set for them using a data-driven approach.
+
+Poll:
+- poll everywhere allows free response + upvote of others
+- could also do a mult choice on zoom
+
+
+## The Business problem 
+Financial institutions MUST provide the government a reason for rejecting loans. We at the CFPB wish to determine two things via a data driven approach:
+1. For accepted loans, are the banks lending appropriate amounts based on the customer information we have assembled? 
+2. For rejected loans are there reasons that are not part of the legally allowable set?
 
 This dataset contains a list of reported loans accepted and rejected within 3 states for 2018 and 2019. It also comes with numerous other columns you might find helpful. Additionally, we have accessed data from the American Community Survey that could provide additional color to your analysis. 
 
-PROBABLY NEED TO DEFINE THIS MORE CLEARLY
-
 ### Translating this problem into something we can solve Analytically
 
-Ask for interaction
-Define a few ways we could analyze this
+When you hear these questions, what immediately comes to your mind?
+
+@Alec, come through and define your own.
 
 ## Explore the dataset
 
-Ask: What checks do you normally perform when you are handed a dataset you've never seen before?
+- Ask: What checks do you normally perform when you are handed a dataset you've never seen before?
 
-Ask: What questions do you ask of the people who provided you the data?
 
+- Ask: What questions do you ask of the people who provided you the data?
+
+## Output
+- save an intermediate copy to the data folder so we don't have to go through cleaning the whole time
