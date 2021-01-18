@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from typing import List
 
 
@@ -80,6 +81,22 @@ class HMDACleaner:
         replacements = {1: "principal", 2: "second", 3: "investment"}
         clean_df["occupancy_type_clean"] = df.occupancy_type.replace(replacements)
 
+        return clean_df
+
+    def clean_loan_to_value_ratio(self, df: pd.DataFrame):
+        clean_df = df.copy()
+        replacements = {"Exempt": np.nan}
+        clean_df["loan_to_value_ratio_clean"] = df.loan_to_value_ratio.replace(
+            replacements
+        ).astype("float")
+        return clean_df
+
+    def clean_property_value(self, df: pd.DataFrame):
+        clean_df = df.copy()
+        replacements = {"Exempt": np.nan}
+        clean_df["property_value_clean"] = df.property_value.replace(
+            replacements
+        ).astype("float")
         return clean_df
 
     def clean(self, df: pd.DataFrame):
