@@ -6,6 +6,8 @@ Welcome to the first week of MGMT 581. This markdown file will walk through the 
 ```python
 # Imports
 import pandas as pd
+import numpy as np
+import seaborn as sns
 import os
 import sys
 
@@ -53,11 +55,16 @@ Financial institutions MUST provide the government a reason for rejecting loans.
 
 This dataset contains a list of reported loans accepted and rejected within 3 states for 2018 and 2019. It also comes with numerous other columns you might find helpful. Additionally, we have accessed data from the American Community Survey that could provide additional color to your analysis. 
 
+
 ### Translating this problem into something we can solve Analytically
 
 When you hear these questions, what immediately comes to your mind?
 
-@Alec, come through and define your own.
+
+- Linear Regression: can we accurately use predictor variables to predict loan amount?
+- Tree based models: are there non-linear corner cases in the data that are easy to identify via decision tree based models?
+- Clustering: are there specific groups within the data that have different characteristics and as a result have different loan amounts?
+
 
 ## Explore the dataset
 
@@ -66,5 +73,105 @@ When you hear these questions, what immediately comes to your mind?
 
 - Ask: What questions do you ask of the people who provided you the data?
 
-## Output
-- save an intermediate copy to the data folder so we don't have to go through cleaning the whole time
+```python
+interface.data.shape
+```
+
+```python
+for types in interface.data.dtypes.unique():
+    print("--------------------")
+    print(f"data type: {types}")
+    print("--------------------")
+    for col in interface.data.loc[:,interface.data.dtypes == types].columns.tolist():
+        print(f"column: {col}")
+        print("^^^^^")
+```
+
+```python
+groups = ["activity_year", "state_code"]
+
+interface.data.groupby(groups).lei.count()
+```
+
+```python
+groups = ["activity_year", "state_code", "action_taken"]
+
+interface.data.groupby(groups).lei.count()
+```
+
+```python
+interface.data.isnull().sum().T
+```
+
+```python
+groups = ["activity_year", "state_code", "action_taken"]
+acceptable_actions = [1,3]
+interface.data.loc[interface.data.action_taken.isin(acceptable_actions)].groupby(groups).agg(lambda x: sum(x.isnull()))
+```
+
+```python
+groups = ["action_taken"]
+acceptable_actions = [1,3]
+agg_dict = {
+    'loan_amount':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+    'income':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+}
+
+interface.data.loc[
+    interface.data.action_taken.isin(acceptable_actions)
+].groupby(
+    groups
+).agg(
+    agg_dict
+)
+```
+
+```python
+sns.displot(data = interface.data.loc[
+    interface.data.action_taken.isin([1])
+].sample(100000), x='income', rug=True, kind="kde")
+```
+
+```python
+sns.displot(data = interface.data.loc[
+    interface.data.action_taken.isin([3])
+].sample(100000), x='income', rug=True, kind = 'kde')
+```
+
+```python
+groups = ["action_taken", "applicant_race_observed"]
+acceptable_actions = [1,3]
+agg_dict = {
+    'loan_amount':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+    'income':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+}
+
+interface.data.loc[
+    interface.data.action_taken.isin(acceptable_actions)
+].groupby(
+    groups
+).agg(
+    agg_dict
+)
+```
+
+```python
+groups = ["action_taken", "applicant_race_observed", "applicant_sex_observed"]
+acceptable_actions = [1,3]
+agg_dict = {
+    'loan_amount':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+    'income':['mean', 'median', 'std', lambda x: np.sum(x.isnull()), lambda x: np.sum(~x.isnull())],
+}
+
+interface.data.loc[
+    interface.data.action_taken.isin(acceptable_actions)
+].groupby(
+    groups
+).agg(
+    agg_dict
+)
+```
+
+```python
+
+```
