@@ -28,7 +28,7 @@ git checkout -b name-of-your-branch
 ```
 8. If using Python, test out the code to see if it is working correctly
 ```
-cd hmda
+cd flights
 pytest tests/unit/test_hello_world.py -s
 ```
 If your terminal returns "Hello MGMT-581!" you have done everything correctly
