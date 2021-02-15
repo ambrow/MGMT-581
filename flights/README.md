@@ -1,12 +1,12 @@
-# Home Mortgage Disclosure Act
+# 2015 US Flights
 HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. Click [here](https://ffiec.cfpb.gov/) for more info on the act and the data.
 
 ## Intended Usage
 We will use this repository to answer 3 overarching questions:
 
-1. Can we predict how much money will be approved (if the application is approved) for a particular mortgage?
-2. Can we reliably predict whether a mortgage application will be approved or denied?
-3. Do the observed patterns related to amount or approval change based on where the mortgage is within the US?
+1. Can we predict how much time a flight's arrival will be delayed?
+2. Can we reliably predict whether a flight will be delayed at all?
+3. Do the observed patterns related to time or delay differ based on where the flight is departing from?
 
 Along the way, we will walk through a number of topics within data-driven decision making that are critical to understand for any data scientist, business analyst, or corporate strategist. A few are listed below:
 
@@ -27,7 +27,7 @@ This repository contains code in both R and Python. Below you will see sections 
 Below you will see what to do to access this code using python on your own machine.
 1. Open an Anaconda prompt (Windows) or Terminal (Mac) and locate the HMDA directory
 ```
-cd path/to/this/directory/hmda
+cd path/to/this/directory/flights
 ```
 2. Use conda to create a virtual environment for this project (this ensures reproducibility across different computers / end users) 
 ```
@@ -35,7 +35,7 @@ conda env create -f environment.yml
 ```
 3. Activate the environment
 ```
-conda activate hmda
+conda activate flights
 ```
 4. Build jupyter lab (if you haven't already in this environment)
 ```
