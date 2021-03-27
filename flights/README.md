@@ -1,5 +1,5 @@
 # 2015 US Flights
-HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. Click [here](https://ffiec.cfpb.gov/) for more info on the act and the data.
+The DOT maintains information on flight delays all across the country. Click [here](https://www.kaggle.com/usdot/flight-delays) for more info on the data.
 
 ## Intended Usage
 We will use this repository to answer 3 overarching questions:
