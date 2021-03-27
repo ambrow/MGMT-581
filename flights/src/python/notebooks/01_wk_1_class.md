@@ -122,7 +122,7 @@ sns.scatterplot(data = flights_df, x='WHEELS_ON', y='WHEELS_OFF')
 ```
 
 ```python
-fig,ax = plt.subplots(figsize=(20,12))
+fig,ax = plt.subplots(figsize=(8,6))
 sns.scatterplot(data = flights_df, x='SCHEDULED_TIME', y='ELAPSED_TIME', hue='DISTANCE')
 ```
 
