@@ -27,11 +27,6 @@ flights_df.head()
 ## In an ideal world, what question would you want to answer with this dataset?
 
 
-Poll:
-- poll everywhere allows free response + upvote of others
-- could also do a mult choice on zoom
-
-
 ## The Business problem 
 Delayed flights are an absolutely miserable customer experience. As a customer, I'm curious to avoid flights that are likely to be delayed when making purchasing decisions. We can use this data to build a model that helps me feel confident in those decisions (and that my flight won't be delayed!)
 
@@ -42,25 +37,27 @@ There are two approaches we will follow in this course:
 
 ### Translating this problem into something we can solve Analytically
 
-When you hear these questions, what immediately comes to your mind?
-
-
+Below are 3 analyses that come to my mind as a data scientist when I hear questions like the ones above. 
 - Linear Regression: can we accurately use predictor variables to predict loan amount?
 - Tree based models: are there non-linear corner cases in the data that are easy to identify via decision tree based models?
 - Clustering: are there specific groups within the data that have different characteristics and as a result have different delay times?
 
+Are there other analyses you might do that don't require data science or statistical techniques?
 
 ## Explore the dataset
 
-- Ask: What checks do you normally perform when you are handed a dataset you've never seen before?
+- What checks do you normally perform when you are handed a dataset you've never seen before?
 
 
-- Ask: What questions do you ask of the people who provided you the data?
+- What questions do you ask of the people who provided you the data?
 
+
+### How many rows & columns are there?
 ```python
 flights_df.shape
 ```
 
+### What are the columns and what are their data types
 ```python
 for types in flights_df.dtypes.unique():
     print("--------------------")
@@ -71,6 +68,7 @@ for types in flights_df.dtypes.unique():
         print("^^^^^")
 ```
 
+### How many distinct things are there? What are the primary keys?
 ```python
 groups = ["ORIGIN_AIRPORT", "DESTINATION_AIRPORT"]
 
@@ -83,12 +81,13 @@ groups = ["ORIGIN_AIRPORT", "DESTINATION_AIRPORT", "MONTH"]
 flights_df.groupby(groups).FLIGHT_NUMBER.count()
 ```
 
+### Do we have missing values?
 ```python
 flights_df.isnull().sum().T
 ```
 
 
-
+### What do things look like visually?
 ```python
 fig,ax = plt.subplots(figsize=(20,12))
 sns.scatterplot(data = flights_df, x='SCHEDULED_DEPARTURE', y='SCHEDULED_ARRIVAL')
@@ -100,6 +99,7 @@ p.map(sns.scatterplot,'SCHEDULED_DEPARTURE', 'SCHEDULED_ARRIVAL')
 p.add_legend()
 ```
 
+### What interesting columns can we build descriptives for?
 ```python
 flights_df.CANCELLED.sum()
 ```
@@ -116,6 +116,7 @@ flights_df.DIVERTED.sum()
 flights_df.groupby(['MONTH','DAY_OF_WEEK']).DIVERTED.sum()
 ```
 
+### Are there built-in relationships we should care about?
 ```python
 fig,ax = plt.subplots(figsize=(20,12))
 sns.scatterplot(data = flights_df, x='WHEELS_ON', y='WHEELS_OFF')
@@ -149,7 +150,7 @@ flights_df.loc[flights_df.DEPARTURE_TIME + flights_df.TAXI_OUT != flights_df.WHE
 ```python
 flights_df.loc[flights_df.SCHEDULED_DEPARTURE + flights_df.DEPARTURE_DELAY != flights_df.DEPARTURE_TIME].head()
 ```
-
+### Very helpful category values -- we will come back to this more next week!
 ```python
 flights_df.CANCELLATION_REASON.value_counts()
 ```
