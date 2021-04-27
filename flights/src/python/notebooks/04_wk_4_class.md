@@ -21,20 +21,53 @@ data_path = os.getcwd().partition("src")[0] + 'data/'
 ```
 
 ```python
-flights_df = pd.read_csv(data_path + "cleaned_data.csv")
+flights_df = pd.read_csv(data_path + "cleaned_outbound_data.csv")
 flights_df.head()
+```
+
+### the weather data
+
+```python
+chicago_temp = pd.read_csv(data_path + "temperature.csv")[['datetime','Chicago']]
+```
+
+```python
+chicago_temp['datetime'] = pd.to_datetime(chicago_temp.datetime)
+```
+
+```python
+chicago_temp['YEAR'] = chicago_temp.datetime.dt.year
+chicago_temp['MONTH'] = chicago_temp.datetime.dt.month
+chicago_temp['DAY'] = chicago_temp.datetime.dt.day
+chicago_temp['HOUR'] = chicago_temp.datetime.dt.hour
 ```
 
 ## Joining data together
 
-- Ask What experience do you have with joins?
 
-- Ask How do you check joins?
+```python
+join_ex = flights_df.sample(100)
+```
 
-- Ask What should our joins look like for this project?
+```python
+join_ex.merge(chicago_temp, how = 'left', left_on = ['YEAR', 'MONTH', 'DAY'], right_on = ['YEAR', 'MONTH', 'DAY'])
+```
 
 ```python
 # do some joins
+join_ex.merge(chicago_temp, how = 'left', left_on = ['YEAR', 'MONTH', 'DAY', 'SCHEDULED_DEPARTURE_HOUR'], right_on = ['YEAR', 'MONTH', 'DAY', 'HOUR'])
+```
+
+```python
+join_ex.merge(chicago_temp, how = 'inner', left_on = ['YEAR', 'MONTH', 'DAY', 'SCHEDULED_DEPARTURE_HOUR'], right_on = ['YEAR', 'MONTH', 'DAY', 'HOUR'])
+```
+
+```python
+join_ex.merge(chicago_temp, how = 'right', left_on = ['YEAR', 'MONTH', 'DAY', 'SCHEDULED_DEPARTURE_HOUR'], right_on = ['YEAR', 'MONTH', 'DAY', 'HOUR'])
+```
+
+```python
+join_ex.merge(chicago_temp, how = 'outer', left_on = ['YEAR', 'MONTH', 'DAY', 'SCHEDULED_DEPARTURE_HOUR'], right_on = ['YEAR', 'MONTH', 'DAY', 'HOUR'])
 ```
 
 ## Heuristics
