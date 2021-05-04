@@ -19,19 +19,56 @@ pd.set_option('display.float_format', lambda x: '%.5f' % x)
 ```python
 data_path = os.getcwd().partition("src")[0] + 'data/'
 ```
-
 ```python
-flights_df = pd.read_csv(data_path + "cleaned_data.csv")
+flights_df = pd.read_csv(data_path + "cleaned_outbound_data.csv")
 flights_df.head()
 ```
 
+### the weather data
+
+```python
+chicago_temp = pd.read_csv(data_path + "temperature.csv")[['datetime','Chicago']]
+```
+
+```python
+chicago_temp
+```
+
+```python
+# tell python this variable is a date
+chicago_temp['datetime'] = pd.to_datetime(chicago_temp.datetime)
+```
+
+```python
+# use the dt attribute to pull out various elements of the date (year, month, etc)
+chicago_temp['YEAR'] = chicago_temp.datetime.dt.year
+chicago_temp['MONTH'] = chicago_temp.datetime.dt.month
+chicago_temp['DAY'] = chicago_temp.datetime.dt.day
+chicago_temp['HOUR'] = chicago_temp.datetime.dt.hour
+```
+
+```python
+chicago_temp
+```
+
+## Joining data together - as discussed last week
+
+
+```python
+# LEFT join on year, month, day, hour
+# join_ex is left df
+# chicago_temp is right_df
+# we end up with 100 rows in our result
+# this is because there is 1 row per day in chicago_temp that matches to the flights 
+flights_df = flights_df.merge(
+    chicago_temp, 
+    how = 'left', 
+    left_on = ['YEAR', 'MONTH', 'DAY', 'SCHEDULED_DEPARTURE_HOUR'], 
+    right_on = ['YEAR', 'MONTH', 'DAY', chicago_temp.HOUR.shift(1).fillna(0)]
+)
+```
+
 ## Pipelines
-
-- Ask What do we mean by a data pipeline?
-
-- Ask Why do we create data pipelines?
-
-- Ask What do we do with data pipelines once the project is done?
 
 ```python
 flights_df.columns.tolist()
@@ -100,12 +137,6 @@ vars_to_create = [
 
 ## Supervised Learning
 
-- Ask What do we mean when we say supervised learning?
-
-- Ask How would you explain a supervised learning model to a non-technical client?
-
-- Ask What supervised learning techniques do you want to try out on our data?
-
 ```python
 # linear regression
 # We will use statsmodels because the output is easy to generate
@@ -125,16 +156,16 @@ vars_to_keep = [
     'SCHEDULED_ARRIVAL_MINUTES',
     'DESTINATION_LATITUDE',
     'DESTINATION_LONGITUDE',
-    'Alaska Airlines Inc.',
-    'American Airlines Inc.',
-    'American Eagle Airlines Inc.',
-    'Atlantic Southeast Airlines',
-    'Delta Air Lines Inc.',
-    'Frontier Airlines Inc.',
-    'JetBlue Airways',
-    'Skywest Airlines Inc.',
-    'Spirit Air Lines',
-    'US Airways Inc.',
+#     'Alaska Airlines Inc.',
+#     'American Airlines Inc.',
+#     'American Eagle Airlines Inc.',
+#     'Atlantic Southeast Airlines',
+#     'Delta Air Lines Inc.',
+#     'Frontier Airlines Inc.',
+#     'JetBlue Airways',
+#     'Skywest Airlines Inc.',
+#     'Spirit Air Lines',
+#     'US Airways Inc.',
     # for dummy variables we must remove one from our variable set in order to avoide multicollinearity
     #  'United Air Lines Inc.',
     'Virgin America',
@@ -181,6 +212,7 @@ X.head()
 ```
 
 ```python
+# create target and investigate
 y = flights_df['ARRIVAL_DELAY']
 ```
 
@@ -189,11 +221,45 @@ y.head()
 ```
 
 ```python
+y.describe()
+```
+
+```python
+y.hist()
+```
+
+## Drop the values below zero & log
+
+```python
+y_above_zero = y[y>0]
+x_above_zero = X[X.index.isin(y_above_zero.index)]
+y_log_above_zero = np.log(y_above_zero)
+```
+
+```python
+y_log_above_zero.hist()
+```
+
+## Modeling
+
+
+### Normal
+
+```python
 X = sm.add_constant(X)
 ```
 
 ```python
 model = sm.OLS(y, X)
+results = model.fit()
+results.summary()
+```
+
+### logged + above zero
+
+```python
+x_above_zero = sm.add_constant(x_above_zero)
+model = sm.OLS(y_log_above_zero, x_above_zero)
 results = model.fit()
 results.summary()
 ```
