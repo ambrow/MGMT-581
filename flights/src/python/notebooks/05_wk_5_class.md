@@ -68,6 +68,10 @@ flights_df = flights_df.merge(
 )
 ```
 
+```python
+flights_df
+```
+
 ## Pipelines
 
 ```python
@@ -106,7 +110,23 @@ vars_of_interest = [
 #### dummy coding
 
 ```python
+flights_df['AIRLINE_CLEANED']
+```
+
+```python
 pd.get_dummies(flights_df['AIRLINE_CLEANED']).head()
+```
+
+```python
+flights_df.merge(
+    pd.get_dummies(flights_df['AIRLINE_CLEANED']), how = 'left', left_index=True, right_index=True
+).head()
+```
+
+```python
+flights_df.join(
+    pd.get_dummies(flights_df['AIRLINE_CLEANED'])
+).head()
 ```
 
 ```python
@@ -114,8 +134,20 @@ flights_df = flights_df.join(pd.get_dummies(flights_df['AIRLINE_CLEANED']))
 ```
 
 ```python
+flights_df.DAY_OF_WEEK_CLEANED
+```
+
+```python
+flights_df.MONTH_CLEANED
+```
+
+```python
 flights_df = flights_df.join(pd.get_dummies(flights_df['DAY_OF_WEEK_CLEANED']))
 flights_df = flights_df.join(pd.get_dummies(flights_df['MONTH_CLEANED']))
+```
+
+```python
+flights_df.head()
 ```
 
 **Are there other variables you would create?**
@@ -130,6 +162,7 @@ vars_to_create = [
     # north to south
     # south to north
     # normal flight
+    # layover or connection?
     # past delays on this route
     # others?
 ]
@@ -147,6 +180,10 @@ import statsmodels.api as sm
 ```
 
 ```python
+vars_to_keep
+```
+
+```python
 vars_to_keep = [
     'DISTANCE',
     # can treat as continuous - maybe do something different?
@@ -156,23 +193,24 @@ vars_to_keep = [
     'SCHEDULED_ARRIVAL_MINUTES',
     'DESTINATION_LATITUDE',
     'DESTINATION_LONGITUDE',
-#     'Alaska Airlines Inc.',
-#     'American Airlines Inc.',
-#     'American Eagle Airlines Inc.',
-#     'Atlantic Southeast Airlines',
-#     'Delta Air Lines Inc.',
-#     'Frontier Airlines Inc.',
-#     'JetBlue Airways',
-#     'Skywest Airlines Inc.',
-#     'Spirit Air Lines',
-#     'US Airways Inc.',
-    # for dummy variables we must remove one from our variable set in order to avoide multicollinearity
-    #  'United Air Lines Inc.',
-    'Virgin America',
+    'Chicago',
+    'Alaska Airlines Inc.',
+    'American Airlines Inc.',
+    'American Eagle Airlines Inc.',
+    'Atlantic Southeast Airlines',
+    'Delta Air Lines Inc.',
+    'Frontier Airlines Inc.',
+    'JetBlue Airways',
+    'Skywest Airlines Inc.',
+    'Spirit Air Lines',
+    'US Airways Inc.',
+#     for dummy variables we must remove one from our variable set in order to avoide multicollinearity
+#      'United Air Lines Inc.',
+#     'Virgin America',
     'FRI',
     'MON',
     'SAT',
-#     'SUN',
+    'SUN',
     'THU',
     'TUE',
     'WED',
@@ -180,13 +218,13 @@ vars_to_keep = [
     'AUG',
     'DEC',
     'FEB',
-    #  'JAN',
+     'JAN',
     'JUL',
     'JUN',
     'MAR',
     'MAY',
     'NOV',
-    'SEP'
+#     'SEP'
 ]
 ```
 
