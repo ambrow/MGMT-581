@@ -162,10 +162,48 @@ vars_to_create = [
     # north to south
     # south to north
     # normal flight
-    # layover or connection?
+    # layover or connection? - didn't have information on this sadly!
     # past delays on this route
     # others?
 ]
+```
+
+```python
+# use the apply function to access the values in the scheduled departure hour column
+# use if logic to check various times
+# assign various time blocks to certain values
+flights_df['departure_shift'] = flights_df.SCHEDULED_DEPARTURE_HOUR.apply(lambda x: 3 if (x > 0) & (x < 6) else 1 if (x>=7) & (x <=13) else 2 if (x > 13) & (x <= 20) else 3)
+flights_df['arrival_shift'] = flights_df.SCHEDULED_ARRIVAL_HOUR.apply(lambda x: 3 if (x > 0) & (x < 6) else 1 if (x>=7) & (x <=13) else 2 if (x > 13) & (x <= 20) else 3)
+flights_df['shift_change'] = (flights_df.departure_shift != flights_df.arrival_shift).astype(int)
+```
+
+```python
+# overnight
+# use logical conditions and convert the true / false result to an integer
+flights_df['change_of_day'] = ((flights_df.SCHEDULED_DEPARTURE_HOUR > 21) & (flights_df.SCHEDULED_ARRIVAL_HOUR > 0)).astype(int)
+```
+
+```python
+# Directional indicators
+flights_df['north_to_south'] = (flights_df.ORIGIN_LATITUDE > flights_df.DESTINATION_LATITUDE).astype(int)
+flights_df['south_to_north'] = (flights_df.ORIGIN_LATITUDE < flights_df.DESTINATION_LATITUDE).astype(int)
+flights_df['east_to_west'] = (flights_df.ORIGIN_LONGITUDE > flights_df.DESTINATION_LONGITUDE).astype(int)
+flights_df['west_to_east'] = (flights_df.ORIGIN_LONGITUDE < flights_df.DESTINATION_LONGITUDE).astype(int)
+```
+
+```python
+# past delays
+# group by route combination
+# shift function looks at the row immediately before (in time)
+# look at the cumulative sum of previously delayed flights
+# rename, drop, and join the column
+flights_df = flights_df.join(
+    flights_df.groupby(
+        ["ORIGIN_AIRPORT", "DESTINATION_AIRPORT"]
+    ).apply(
+        lambda x: (x.ARRIVAL_DELAY.shift(1)>0).cumsum()
+    ).reset_index(
+    ).set_index("level_2").drop(["ORIGIN_AIRPORT",'DESTINATION_AIRPORT'],axis=1).rename(columns = {'ARRIVAL_DELAY':'PAST_DELAYS'}))
 ```
 
 ## Supervised Learning
