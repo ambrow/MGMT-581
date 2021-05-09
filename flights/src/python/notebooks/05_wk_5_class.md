@@ -19,6 +19,7 @@ pd.set_option('display.float_format', lambda x: '%.5f' % x)
 ```python
 data_path = os.getcwd().partition("src")[0] + 'data/'
 ```
+
 ```python
 flights_df = pd.read_csv(data_path + "cleaned_outbound_data.csv")
 flights_df.head()
