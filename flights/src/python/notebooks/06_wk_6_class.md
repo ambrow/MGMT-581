@@ -78,6 +78,10 @@ weather['DAY'] = weather.datetime.dt.day
 weather['HOUR'] = weather.datetime.dt.hour
 ```
 
+```python
+weather.head()
+```
+
 ## Joining data together - as discussed last week
 
 
@@ -256,9 +260,9 @@ flights_df = flights_df.join(
     flights_df.groupby(
         ["ORIGIN_AIRPORT", "DESTINATION_AIRPORT"]
     ).apply(
-        lambda x: (x.ARRIVAL_DELAY.shift(1)>0).cumsum()
+        lambda x: (x.DEPARTURE_DELAY.shift(1)>0).cumsum()
     ).reset_index(
-    ).set_index("level_2").drop(["ORIGIN_AIRPORT",'DESTINATION_AIRPORT'],axis=1).rename(columns = {'ARRIVAL_DELAY':'PAST_DELAYS'}))
+    ).set_index("level_2").drop(["ORIGIN_AIRPORT",'DESTINATION_AIRPORT'],axis=1).rename(columns = {'DEPARTURE_DELAY':'PAST_DELAYS'}))
 ```
 
 ## Supervised Learning
@@ -306,7 +310,7 @@ vars_to_keep = [
     'SUN',
     'THU',
     'TUE',
-    'WED',
+#     'WED',
     'APR',
     'AUG',
     'DEC',
@@ -347,7 +351,12 @@ flights_df.shape[0]
 ```
 
 ```python
-X = flights_df[vars_to_keep]
+training_sample = flights_df.sample(frac=.75, random_state = 12)
+testing_sample = flights_df.loc[~flights_df.index.isin(training_sample)]
+```
+
+```python
+X = training_sample[vars_to_keep]
 ```
 
 ```python
@@ -356,7 +365,7 @@ X.head()
 
 ```python
 # create target and investigate
-y = flights_df['ARRIVAL_DELAY']
+y = training_sample['DEPARTURE_DELAY']
 ```
 
 ```python
@@ -395,23 +404,36 @@ sns.displot(results.predict())
 
 
 ```python
-y_pred = results.predict()
+x_test = testing_sample[vars_to_keep]
+x_test = sm.add_constant(x_test)
+y_test = testing_sample['DEPARTURE_DELAY']
+```
+
+```python
+y_pred = results.predict(x_test)
 y_pred[:5]
 ```
 
 ```python
-prediction_error = y_pred - y
+fig, ax = plt.subplots(figsize = (10,6))
+ax.set_xlim(-10,600)
+ax.set_ylim(-10, 600)
+sns.scatterplot(x = y_test, y = y_pred)
+```
+
+```python
+prediction_error = y_pred - y_test
 abs_error = np.abs(prediction_error)
 mean_abs_error = np.mean(abs_error)
-abs_percentage_error = abs_error / np.where(y==0,.001, y)
+abs_percentage_error = abs_error / np.where(y_test==0,.001, y_test)
 mean_abs_percentage_error = np.mean(abs_percentage_error)
 ```
 
 ```python
-using_the_mean = np.mean(y) - y
+using_the_mean = np.mean(y) - y_test
 abs_error_mean = np.abs(using_the_mean)
 mean_abs_error_mean = np.mean(abs_error_mean)
-abs_percentage_error_mean = abs_error_mean / np.where(y==0,.001, y)
+abs_percentage_error_mean = abs_error_mean / np.where(y_test==0,.001, y_test)
 mean_abs_percentage_error_mean = np.mean(abs_percentage_error_mean)
 ```
 
@@ -421,6 +443,14 @@ mean_abs_error
 
 ```python
 mean_abs_error_mean
+```
+
+```python
+(mean_abs_error * .06) + mean_abs_error
+```
+
+```python
+mean_abs_error / mean_abs_error_mean
 ```
 
 ```python
@@ -437,6 +467,10 @@ sns.distplot(prediction_error)
 
 ```python
 prediction_error.describe()
+```
+
+```python
+using_the_mean.describe()
 ```
 
 ```python

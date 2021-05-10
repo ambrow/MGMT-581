@@ -123,9 +123,17 @@ chi_flights.shape
 ```
 
 ```python
-# given data size, let's split outbound and incoming into two separate datasets for now
+flights_df.shape[0] - chi_flights.shape[0]
+```
+
+```python
+##### given data size, let's split outbound and incoming into two separate datasets for now
 outbound = chi_flights.loc[chi_flights.ORIGIN_AIRPORT.isin(chi_airports)].copy()
 incoming = chi_flights.loc[chi_flights.DESTINATION_AIRPORT.isin(chi_airports)].copy()
+```
+
+```python
+chi_flights.shape[0] - outbound.shape[0]
 ```
 
 ```python
@@ -208,6 +216,10 @@ outbound = outbound.loc[
     (outbound.CANCELLED==0) &
     (outbound.DIVERTED==0)
 ]
+```
+
+```python
+outbound.shape[0]
 ```
 
 ```python
