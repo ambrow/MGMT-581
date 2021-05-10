@@ -112,7 +112,7 @@ flights_df = flights_df.merge(
 ```
 
 ```python
-flights_df
+flights_df.head()
 ```
 
 ## Pipelines
@@ -248,6 +248,14 @@ flights_df['north_to_south'] = (flights_df.ORIGIN_LATITUDE > flights_df.DESTINAT
 flights_df['south_to_north'] = (flights_df.ORIGIN_LATITUDE < flights_df.DESTINATION_LATITUDE).astype(int)
 flights_df['east_to_west'] = (flights_df.ORIGIN_LONGITUDE > flights_df.DESTINATION_LONGITUDE).astype(int)
 flights_df['west_to_east'] = (flights_df.ORIGIN_LONGITUDE < flights_df.DESTINATION_LONGITUDE).astype(int)
+```
+
+```python
+flights_df.groupby(
+        ["ORIGIN_AIRPORT", "DESTINATION_AIRPORT"]
+    ).apply(
+        lambda x: (x.DEPARTURE_DELAY.shift(1)>0).cumsum()
+    )
 ```
 
 ```python
@@ -446,14 +454,6 @@ mean_abs_error_mean
 ```
 
 ```python
-(mean_abs_error * .06) + mean_abs_error
-```
-
-```python
-mean_abs_error / mean_abs_error_mean
-```
-
-```python
 mean_abs_percentage_error
 ```
 
@@ -479,38 +479,6 @@ abs_error.describe()
 
 ```python
 abs_percentage_error.describe()
-```
-
-## Classification
-
-```python
-new_target = (y > 60).astype(int)
-```
-
-```python
-new_target
-```
-
-```python
-log_reg = sm.Logit(new_target, X).fit()
-log_reg.summary()
-```
-
-```python
-sns.displot(log_reg.predict())
-```
-
-```python
-for val in [.1,.2,.3,.4,.5]:
-    print(val)
-    cm = log_reg.pred_table(val)
-    print(cm)
-    print(f"accuracy: {(cm[0][0]+ cm[1][1]) / flights_df.shape[0]}, precision: {cm[1][1] / (cm[1][0] + cm[1][1])}, recall: {cm[1][1] / (cm[0][1] + cm[1][1])}")
-    print("-----------------------")
-```
-
-```python
-log_reg.pred_table(.1)
 ```
 
 ```python
